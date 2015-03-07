@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visha's Experiments</title>
+    <script type="text/javascript" src="js/jquery-1.11.2.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.css" />
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/angular-route.min.js"></script>
+    <script type="text/javascript" src="js/Expt1Controller.js"></script>
+    <script type="text/javascript" src="js/ProductService.js"></script>
+    <link rel="stylesheet" href="stylesheets/style.css" />
+</head>	
+<body ng-app="AngularApp">
+    <div class="main-wrapper">
+        <h1>Node.js Experiment 1 - Basic node.js experiment </h1>
+        <div class="demo-wrapper">
+            <h2>Basic node.js experiment fetching data from the server</h2>
+            <div class="container" ng-controller="MainController">
+        <nav class="navbar navbar-inverse" >
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand active" href="#/home">Online Shopping</a>
+                    <ul class="nav navbar-nav">
+                        <li id="homelink"><a href="#/home">Home<span class="sr-only">(current)</span></a></li>
+                        <li id="searchlink"><a href="#/search">Search</a></li>
+                        <li id="favoritelink" ng-show="currentuser"><a href="#/favorites">My Favorites</a></li>
+                        <li id="commentlink" ng-show="currentuser"><a href="#/myReviews">My Reviews</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div ng-view>
+
+        </div>
+    </div>
+        </div>
+        <h2>About the experiment</h2>
+        <p id="text">
+            This is a very basic experiment exhibiting the use of node.js server. The server is configured with the $http.get
+            method with all necessary logic. So when client sends GET request to the server, the server executes the code inside
+            the get method returning the appropriate result. In this experiment, the server's get method 
+            will return a list of products to the client. Since there can be more than one get method configured for the server,
+            the server will match the url to invoke the appropriate method. The server's get method to fetch details of a particular
+            product given the product id will like the following:
+            <br />
+            <br />
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                        app.get('/getDetails/:id', function (req, res) { <br/>
+    					for(var i in products){ <br/>
+        				if(products[i].id == req.params.id){ <br/>
+            			res.json(products[i]); <br/>
+        				} <br/>
+    					} <br/>
+						}); <br/>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            If no product id is given, then the following get method will be invoked :
+            <br />
+            <br />
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                        app.get('/getDetails', function (req, res) { <br/>
+    					res.json(products); <br/>
+						});  <br/>
+                    </td>
+                </tr>
+            </table>
+        </p>
+        <h2>Source Code</h2>
+        <div><a href="https://github.com/visha-r/nodeproject/blob/master/app.js" target="_blank">Node.js Source</a></div>
+        <h2>References</h2>
+        <div><a href="https://www.youtube.com/watch?v=WGnQAgk2dz4" target="_blank"> Youtube Lecture </a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+﻿<div class="tablediv row">
+    <div class="col-sm-1">
+    </div>
+    <div class="col-sm-10">
+        <table class="table table-striped table-hover table-responsive prdtTable">
+
+            <thead>
+                <!-- <tr>
+                    <td colspan="3">
+                        Please add your reviews for the product here.
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" ng-model="review.title" placeholder="Review Title" />
+                    </td>
+                    <td>
+                        <input class="form-control" ng-model="review.description" placeholder="Type your review here" />
+                    </td>
+                    <td>
+                        <input type="text" ng-model="review.name" class="form-control" placeholder="Your name" />
+                    </td>
+                    <td>
+                        <button style="float:left" class="btn btn-success" ng-click="addReview(review)"><span class="glyphicon glyphicon-plus"></span></button>
+                    </td>
+                </tr> -->
+                <tr>
+                    <th colspan="3">
+                        Product Reviews
+                    </th>
+                </tr>
+            </thead>
+
+            <tr ng-repeat="review in reviews">
+                <td width="100%" colspan="3">
+                    <h4><b>{{review.title}}</b></h4>
+                    <p><b>Reviewer : </b>{{review.reviewer}}</p>
+                    <p><b>Comments :</b> {{review.description}}</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-sm-1">
+    </div>
+</div>
