@@ -14,9 +14,9 @@
 </head>	
 <body ng-app="AngularApp">
     <div class="main-wrapper">
-        <h1>Node.js Experiment 1 - Basic node.js experiment </h1>
+        <h1>MongoDB Experiment 1 - Experiment exhibiting CRUD operations </h1>
         <div class="demo-wrapper">
-            <h2>Basic node.js experiment fetching data from the server</h2>
+            <h2>Basic experiment exhibiting CRUD operations</h2>
             <div class="container" ng-controller="MainController">
         <nav class="navbar navbar-inverse" >
             <div class="container">
@@ -44,12 +44,9 @@
         </div>
         <h2>About the experiment</h2>
         <p id="text">
-            This is a very basic experiment exhibiting the use of node.js server. The server is configured with the $http.get
-            method with all necessary logic. So when client sends GET request to the server, the server executes the code inside
-            the get method returning the appropriate result. In this experiment, the server's get method 
-            will return a list of products to the client. Since there can be more than one get method configured for the server,
-            the server will match the url to invoke the appropriate method. The server's get method to fetch details of a particular
-            product given the product id will like the following:
+            This is a very basic experiment exhibiting the operations such as create, read, update and delete documents on the
+            mongodb database. To execute read operation to fetch all records from the database, $http.get method with the
+            corresponding url is invoked on the server. The server gets all the records through find() method and returns the json data.
             <br />
             <br />
             <b>Code Snippet:</b>
@@ -58,18 +55,18 @@
             <table class="code">
                 <tr>
                     <td width="100%">
-                        app.get('/getDetails/:id', function (req, res) { <br/>
-    					for(var i in products){ <br/>
-        				if(products[i].id == req.params.id){ <br/>
-            			res.json(products[i]); <br/>
-        				} <br/>
-    					} <br/>
+                        app.get('/product/fetch', function(req,res){ <br/>
+						Productmodel.find(function(err,data){ <br/>
+						res.json(data); <br/>
+						}); <br/>
 						}); <br/>
                     </td>
                 </tr>
             </table>
             <br />
-            If no product id is given, then the following get method will be invoked :
+            To update any record, the product id along with the information to be updated is passed on to the server in the
+            message body. The service passes the request to the server which in turn executes the update operation on the
+            database.
             <br />
             <br />
             <b>Code Snippet:</b>
@@ -78,9 +75,57 @@
             <table class="code">
                 <tr>
                     <td width="100%">
-                        app.get('/getDetails', function (req, res) { <br/>
-    					res.json(products); <br/>
-						});  <br/>
+                        app.put('/product/update/:id', function (req, res) { <br/>
+						Productmodel.update({_id:req.params.id},{$set:req.body}, function(err, data){ <br/>
+						Productmodel.find(function(err, result){ <br/>
+						res.json(result); <br/>
+						}) <br/>
+						}) <br/>
+						}); <br/>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            To delete any product, the id of the corresponding product is sent to the server, which executes remove operation
+            by first finding the respective record and then deleting it.
+            <br />
+            <br />
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                        app.delete('/product/remove/:id', function(req,res){ <br/>
+						Productmodel.findById(req.params.id, function (err,data){ <br/>
+						data.remove(function (err, doc){ <br/>
+						Productmodel.find(function (err, result){ <br/>
+						res.json(result); <br/>
+						}) <br/>
+						}) <br/>
+						}) <br/>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            To create a new product, the information about the product is passed to the server in the message body. The server
+            parses the body and then inserts the record through save operation.
+            <br />
+            <br />
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                        app.post('/product/add', function(req,res){ <br/>
+						var prdt = new Productmodel(req.body); <br/>
+						prdt.save(function (err, doc){ <br/>
+						Productmodel.find(function (err,data){ <br/>
+						res.json(data); <br/>
+						}) <br/>
+						}) <br/>
+						}); <br/>
                     </td>
                 </tr>
             </table>
@@ -88,7 +133,7 @@
         <h2>Source Code</h2>
         <div><a href="https://github.com/visha-r/nodeproject/blob/master/app.js" target="_blank">Node.js Source</a></div>
         <h2>References</h2>
-        <div><a href="https://www.youtube.com/watch?v=WGnQAgk2dz4" target="_blank"> Youtube Lecture </a></div>
+        <div><a href="https://www.youtube.com/watch?v=c-etW7AX9cA" target="_blank"> Youtube Lecture </a></div>
     </div>
 </body>
 </html>

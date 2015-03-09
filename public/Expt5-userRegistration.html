@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visha's Experiments</title>
+    <script type="text/javascript" src="js/jquery-1.11.2.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.css" />
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/angular-route.min.js"></script>
+    <script type="text/javascript" src="js/Expt5Controller.js"></script>
+    <script type="text/javascript" src="js/ProductService.js"></script>
+    <link rel="stylesheet" href="stylesheets/style.css" />
+</head>	
+<body ng-app="AngularApp">
+    <div class="main-wrapper">
+        <h1>MongoDB Experiment 5 - User registration </h1>
+        <div class="demo-wrapper">
+            <h2>Experiment to register user to the application</h2>
+            <div class="instructions">
+            You can register using the link below the password field. Once registered, please login to the application with
+            the username and password you chose while registering and enjoy your shopping!!
+            <p><b><i> * Please note that you will not receive any notification upon registration. Once you click the submit
+            button you are registered into the system.</i></b>
+            </div>
+            <div class="container">
+        	<nav class="navbar navbar-inverse" ng-controller="MainController">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>                        
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand active" href="#/home">Online Shopping</a>
+                    <ul class="nav navbar-nav">
+                        <li id="homelink"><a href="#/home">Home<span class="sr-only">(current)</span></a></li>
+                        <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search by Category <b class="caret"></b></a>
+                    <ul class="dropdown-menu multi-level">
+                        
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Laptops</a>
+                            <ul class="dropdown-menu">
+                                <li ng-if="userId == null "><a href="#/search/MOBILE COMPUTING/Lenovo/null">Lenovo</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MOBILE COMPUTING/Lenovo/{{userId}}">Lenovo</a></li>
+                                <li class="divider"></li>
+                                <li ng-if="userId == null "><a href="#/search/MOBILE COMPUTING/Samsung/null">Samsung</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MOBILE COMPUTING/Samsung/{{userId}}">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li ng-if="userId == null "><a href="#/search/MOBILE COMPUTING/Dell/null">Dell</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MOBILE COMPUTING/Dell/{{userId}}">Dell</a></li>
+                                 <li class="divider"></li>
+                                 <li ng-if="userId == null "><a href="#/search/MOBILE COMPUTING/Acer/null">Acer</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MOBILE COMPUTING/Acer/{{userId}}">Acer</a></li>
+                                 <li class="divider"></li>
+                                 <li ng-if="userId == null "><a href="#/search/MOBILE COMPUTING/Asus/null">Asus</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MOBILE COMPUTING/Asus/{{userId}}">Asus</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Mobile Phones</a>
+                            <ul class="dropdown-menu">
+                                 <li ng-if="userId == null "><a href="#/search/SPRINT HARDWARE/Samsung/null">Samsung</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/SPRINT HARDWARE/{{userId}}">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li ng-if="userId == null "><a href="#/search/SPRINT HARDWARE/Nokia/null">Nokia</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/SPRINT HARDWARE/Nokia/{{userId}}">Nokia</a></li>
+                                 <li class="divider"></li>
+                                <li ng-if="userId == null "><a href="#/search/SPRINT HARDWARE/Blackberry/null">Blackberry</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/SPRINT HARDWARE/Blackberry/{{userId}}">Blackberry</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Microwaves</a>
+                            <ul class="dropdown-menu">
+                                <li ng-if="userId == null "><a href="#/search/MICROWAVE/Frigidaire/null">Frigidaire</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MICROWAVE/Frigidaire/{{userId}}">Frigidaire</a></li>
+                                 <li class="divider"></li>
+                                 <li ng-if="userId == null "><a href="#/search/MICROWAVE/Samsung/null">Samsung</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MICROWAVE/Samsung/{{userId}}">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li ng-if="userId == null "><a href="#/search/MICROWAVE/LG/null">LG</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MICROWAVE/LG/{{userId}}">LG</a></li>
+                                 <li class="divider"></li>
+                                <li ng-if="userId == null "><a href="#/search/MICROWAVE/Panasonic/null">Panasonic</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MICROWAVE/Panasonic/{{userId}}">Panasonic</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Washer and Dryers</a>
+                            <ul class="dropdown-menu">
+                                <li ng-if="userId == null "><a href="#/search/LAUNDRY/Whirlpool/null">Whirlpool</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/LAUNDRY/Whirlpool/{{userId}}">Whirlpool</a></li>
+                                 <li class="divider"></li>
+                                 <li ng-if="userId == null "><a href="#/search/LAUNDRY/Samsung/null">Samsung</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/LAUNDRY/Samsung/{{userId}}">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li ng-if="userId == null "><a href="#/search/LAUNDRY/LG/null">LG</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/LAUNDRY/LG/{{userId}}">LG</a></li>
+                                 <li class="divider"></li>
+                                <li ng-if="userId == null "><a href="#/search/LAUNDRY/GE/null">GE</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/LAUNDRY/GE/{{userId}}">GE</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                
+                        <li id="favoritelink" ng-show="userId"><a href="#/favorites/{{userId}}">My Favorites</a></li>
+                        <li id="favoritelink" ng-show="userId"><a href="#/cart/{{userId}}">My Cart</a></li>
+                    </ul>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                            <form class="navbar-form navbar-right" ng-show="!currentuser">
+                                <div class="form-group">
+                                    <input type="text" placeholder="Username" ng-model="username" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" placeholder="Password" ng-model="password" class="form-control">
+                                </div>
+                                <button ng-click="login()" class="btn btn-success">Sign in</button>
+                            </form>
+                            
+							<ul class="nav navbar-nav navbar-right" ng-show="!currentuser">
+                                <a href="#/register"> <li style="color:whitesmoke">New user? Register here</li> </a>
+                            </ul>
+                            
+                            <ul class="nav navbar-nav navbar-right" ng-show="currentuser">
+                                <li style="color:whitesmoke">Hello &nbsp;&nbsp;{{currentuser}}</li>
+                                <li><a href="#/logout" ng-click="logout()">Logout</a></li>
+                            </ul>
+
+                </div><!--/.navbar-collapse -->
+        </nav>
+        <div ng-view>
+
+        </div>
+    	</div>
+        </div>
+        <h2>About the experiment</h2>
+        <p id="text">
+        	The previous experiment enforces user to login with a predefined username and password. So this experiment overcomes
+        	that drawback by letting user to register into the application. In the MongoDB, to maintain user details a new schema
+        	called Usermodel has been defined. This schema holds all user information along with the users favorite and cart
+        	products. The schema is defined as follows :
+        	<br />
+            <br />
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                        var UserSchema = new mongoose.Schema( <br/>
+						{  <br/>
+							firstname: String, lastname: String, email: String, username: String, password : String, favorites :[Number], cart : [Number] <br/>
+						}); <br/>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            Once the user registers, his information is stored in the usermodel collection. When the same user tries to login, his credentials will be
+            matched against the ones in the database. If a match is found, the user will be in session otherwise he cannot add
+            favorites or items to his cart. But he can still search for products. The registration is handled in the server as
+            follows :
+            <br />
+            <br />
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                        app.post('/user/register', function(req,res){<br/>
+						var user = new Usermodel(req.body); <br/>
+						user.save(function (err, doc){ <br/>
+						}) <br/>
+						}); <br/>
+                    </td>
+                </tr>
+            </table>
+        </p>
+        <h2>Source Code</h2>
+        <div><a href="https://github.com/visha-r/nodeproject/blob/master/app.js" target="_blank">Node.js Source</a></div>
+        <h2>References</h2>
+        <div><a href="https://www.youtube.com/watch?v=WGnQAgk2dz4" target="_blank"> Youtube Lecture </a></div>
+        <div><a href="http://bootsnipp.com/snippets/featured/multi-level-navbar-menu" target="_blank">Bootsnipp</a></div>
+    </div>
+</body>
+</html>

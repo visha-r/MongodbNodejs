@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visha's Experiments</title>
+    <script type="text/javascript" src="js/jquery-1.11.2.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.css" />
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/angular-route.min.js"></script>
+    <script type="text/javascript" src="js/Expt4Controller.js"></script>
+    <script type="text/javascript" src="js/ProductService.js"></script>
+    <link rel="stylesheet" href="stylesheets/style.css" />
+</head>	
+<body ng-app="AngularApp">
+    <div class="main-wrapper">
+        <h1>MongoDB Experiment 4 - Menu by category and Shopping cart information </h1>
+        <div class="demo-wrapper">
+            <h2>Experiment to manage user's shopping cart using mongoDB and webservice</h2>
+            <div class="instructions">
+            The user can search for products without logging into the application. But to add products to the favorites and
+            cart, please login with username and password as 'admin'.
+            </div>
+            <div class="container">
+        	<nav class="navbar navbar-inverse" ng-controller="MainController">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>                        
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand active" href="#/home">Online Shopping</a>
+                    <ul class="nav navbar-nav">
+                        <li id="homelink"><a href="#/home">Home<span class="sr-only">(current)</span></a></li>
+                        <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search by Category <b class="caret"></b></a>
+                    <ul class="dropdown-menu multi-level">
+                        
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Laptops</a>
+                            <ul class="dropdown-menu">
+                                <li ng-if="userId == null "><a href="#/search/MOBILE COMPUTING/Lenovo/null">Lenovo</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MOBILE COMPUTING/Lenovo/{{userId}}">Lenovo</a></li>
+                                <li class="divider"></li>
+                                <li ng-if="userId == null "><a href="#/search/MOBILE COMPUTING/Samsung/null">Samsung</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MOBILE COMPUTING/Samsung/{{userId}}">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li ng-if="userId == null "><a href="#/search/MOBILE COMPUTING/Dell/null">Dell</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MOBILE COMPUTING/Dell/{{userId}}">Dell</a></li>
+                                 <li class="divider"></li>
+                                 <li ng-if="userId == null "><a href="#/search/MOBILE COMPUTING/Acer/null">Acer</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MOBILE COMPUTING/Acer/{{userId}}">Acer</a></li>
+                                 <li class="divider"></li>
+                                 <li ng-if="userId == null "><a href="#/search/MOBILE COMPUTING/Asus/null">Asus</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MOBILE COMPUTING/Asus/{{userId}}">Asus</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Mobile Phones</a>
+                            <ul class="dropdown-menu">
+                                 <li ng-if="userId == null "><a href="#/search/SPRINT HARDWARE/Samsung/null">Samsung</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/SPRINT HARDWARE/{{userId}}">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li ng-if="userId == null "><a href="#/search/SPRINT HARDWARE/Nokia/null">Nokia</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/SPRINT HARDWARE/Nokia/{{userId}}">Nokia</a></li>
+                                 <li class="divider"></li>
+                                <li ng-if="userId == null "><a href="#/search/SPRINT HARDWARE/Blackberry/null">Blackberry</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/SPRINT HARDWARE/Blackberry/{{userId}}">Blackberry</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Microwaves</a>
+                            <ul class="dropdown-menu">
+                                <li ng-if="userId == null "><a href="#/search/MICROWAVE/Frigidaire/null">Frigidaire</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MICROWAVE/Frigidaire/{{userId}}">Frigidaire</a></li>
+                                 <li class="divider"></li>
+                                 <li ng-if="userId == null "><a href="#/search/MICROWAVE/Samsung/null">Samsung</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MICROWAVE/Samsung/{{userId}}">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li ng-if="userId == null "><a href="#/search/MICROWAVE/LG/null">LG</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MICROWAVE/LG/{{userId}}">LG</a></li>
+                                 <li class="divider"></li>
+                                <li ng-if="userId == null "><a href="#/search/MICROWAVE/Panasonic/null">Panasonic</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/MICROWAVE/Panasonic/{{userId}}">Panasonic</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Washer and Dryers</a>
+                            <ul class="dropdown-menu">
+                                <li ng-if="userId == null "><a href="#/search/LAUNDRY/Whirlpool/null">Whirlpool</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/LAUNDRY/Whirlpool/{{userId}}">Whirlpool</a></li>
+                                 <li class="divider"></li>
+                                 <li ng-if="userId == null "><a href="#/search/LAUNDRY/Samsung/null">Samsung</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/LAUNDRY/Samsung/{{userId}}">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li ng-if="userId == null "><a href="#/search/LAUNDRY/LG/null">LG</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/LAUNDRY/LG/{{userId}}">LG</a></li>
+                                 <li class="divider"></li>
+                                <li ng-if="userId == null "><a href="#/search/LAUNDRY/GE/null">GE</a></li>
+                                <li ng-if ="userId != null "><a href="#/search/LAUNDRY/GE/{{userId}}">GE</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                        <li id="favoritelink" ng-show="userId"><a href="#/favorites/{{userId}}">My Favorites</a></li>
+                        <li id="favoritelink" ng-show="userId"><a href="#/cart/{{userId}}">My Cart</a></li>
+                    </ul>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                            <form class="navbar-form navbar-right" ng-show="!currentuser">
+                                <div class="form-group">
+                                    <input type="text" placeholder="Username" ng-model="username" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" placeholder="Password" ng-model="password" class="form-control">
+                                </div>
+                                <button ng-click="login()" class="btn btn-success">Sign in</button>
+                            </form>
+
+                            <ul class="nav navbar-nav navbar-right" ng-show="currentuser">
+                                <li style="color:whitesmoke">Hello &nbsp;&nbsp;{{currentuser}}</li>
+                                <li><a href="#/logout" ng-click="logout()">Logout</a></li>
+                            </ul>
+
+                </div><!--/.navbar-collapse -->
+        </nav>
+        <div ng-view>
+
+        </div>
+    	</div>
+        </div>
+        <h2>About the experiment</h2>
+        <p id="text">
+        
+        	This experiment enhances the search interface by classifying products based on their category. When user clicks on a
+        	particular link, the corresponsing product' class and name is passed on to the service which uses the same to fetch the
+        	product's details using the RESTful api. For example, if user clicks the menu whirlpool under Washer and Dryer, the 
+        	category is passed on as follows :
+        	<br />
+            <br />
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                        &lt;li ng-if =&quot;userId != null &quot;&gt;&lt;a href=&quot;#/search/LAUNDRY/Whirlpool/{{userId}}&quot;&gt;Whirlp
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            This experiment manages user's cart information by storing the user's cart product ids in the mongoDB database. Instead
+            of saving the entire product information, only the information that is necessary to invoke the webservice is stored in the
+            database. In this case, the product id 'sku' is unique for each and every product. Hence the cart products are stored for
+            every user in the database. When a user logs into the application, his userId is stored in the scope which will then
+            be used to fetch his cart products .When the user tries to view his favorites by clicking the My cart link, the product ids
+            are fetched from the database and used in the http request for the remote webservice.
+            <br />
+            <br />
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                        $http.get('/user/cart/'+ username) <br/>
+    					.success(function (response) { <br/>
+    					var cartIds = response; <br/>
+    					for(var j in cartIds){ <br/>
+    					ProductService.getProduct(cartIds[j], function(response){ <br/>
+    					$scope.cartProducts.push(response.products[0]); <br/>
+    					}); <br/>
+    					} <br/>
+    					}); <br/>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            Once the user's cart products ids are available, the service is invoked to fetch the information about
+            all relevant products as follows :
+            <br/>
+            <br/>
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                       var fetchProducts = function (manufacturer,callback) { <br/>
+         				$http.jsonp('http://api.remix.bestbuy.com/v1/products(manufacturer=' + manufacturer + ')?format=json&show=all&callback=JSON_CALLBACK&apiKey=') <br/>
+         				.success(callback); <br/>
+           				 };  <br/>
+                    </td>
+                </tr>
+            </table>
+        </p>
+        <h2>Source Code</h2>
+        <div><a href="https://github.com/visha-r/nodeproject/blob/master/app.js" target="_blank">Node.js Source</a></div>
+        <h2>References</h2>
+        <div><a href="https://www.youtube.com/watch?v=WGnQAgk2dz4" target="_blank"> Youtube Lecture </a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visha's Experiments</title>
+    <script type="text/javascript" src="js/jquery-1.11.2.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.css" />
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/angular-route.min.js"></script>
+    <script type="text/javascript" src="js/Expt3Controller.js"></script>
+    <script type="text/javascript" src="js/ProductService.js"></script>
+    <link rel="stylesheet" href="stylesheets/style.css" />
+</head>	
+<body ng-app="AngularApp">
+    <div class="main-wrapper">
+        <h1>MongoDB Experiment 3 - MongoDB with RESTful Api </h1>
+        <div class="demo-wrapper">
+            <h2>Experiment to manage user's favorites using mongoDB and webservice</h2>
+            <div class="instructions">
+            The user can search for products without logging into the application. But to add products to the favorites, please login with username and password as 'admin'.
+            </div>
+            <div class="container">
+        	<nav class="navbar navbar-inverse" ng-controller="MainController">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand active" href="#/home">Online Shopping</a>
+                    <ul class="nav navbar-nav">
+                        <li id="homelink"><a href="#/home">Home<span class="sr-only">(current)</span></a></li>
+                        <li id="searchlink" ng-if="userId == null "><a href="#/search/null">Search</a></li>
+                        <li id="searchlink" ng-if ="userId != null "><a href="#/search/{{userId}}">Search</a></li>
+                        
+                        <li id="favoritelink" ng-show="userId"><a href="#/favorites/{{userId}}">My Favorites</a></li>
+                    </ul>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                            <form class="navbar-form navbar-right" ng-show="!currentuser">
+                                <div class="form-group">
+                                    <input type="text" placeholder="Username" ng-model="username" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" placeholder="Password" ng-model="password" class="form-control">
+                                </div>
+                                <button ng-click="login()" class="btn btn-success">Sign in</button>
+                            </form>
+
+                            <ul class="nav navbar-nav navbar-right" ng-show="currentuser">
+                                <li style="color:whitesmoke">Hello &nbsp;&nbsp;{{currentuser}}</li>
+                                <li><a href="#/logout" ng-click="logout()">Logout</a></li>
+                            </ul>
+
+                </div><!--/.navbar-collapse -->
+        </nav>
+        <div ng-view>
+
+        </div>
+    	</div>
+        </div>
+        <h2>About the experiment</h2>
+        <p id="text">
+            This experiment manages user's favorites by storing the user's favorite product ids in the mongoDB database. Instead
+            of saving the entire product information, only the information that is necessary to invoke the webservice is stored in the
+            database. In this case, the product id 'sku' is unique for each and every product. Hence the favorites are stored for
+            every user in the database. When a user logs into the application, his userId is stored in the scope which will then
+            be used to fetch his favorites.When the user tries to view his favorites by clicking the faorites link, the product ids
+            are fetched from the database and used in the http request for the remote webservice.
+            <br />
+            <br />
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                        $http.get('/user/favorites/'+ username) <br/>
+   						.success(function (response) { <br/>
+    					var favoriteIds = response; <br/>
+    					for(var j in favoriteIds){ <br/>
+    					ProductService.getProduct(favoriteIds[j], function(response){ <br/>
+    					$scope.favoriteProducts.push(response.products[0]); <br/>
+    					}); <br/>
+    					} <br/>
+    					}); <br/>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            Once the user's favorite products ids are available, the service is invoked to fetch the information about
+            all relevant products as follows :
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                       var fetchProducts = function (manufacturer,callback) { <br/>
+         				$http.jsonp('http://api.remix.bestbuy.com/v1/products(manufacturer=' + manufacturer + ')?format=json&show=all&callback=JSON_CALLBACK&apiKey=') <br/>
+         				.success(callback); <br/>
+           				 };  <br/>
+                    </td>
+                </tr>
+            </table>
+        </p>
+        <h2>Source Code</h2>
+        <div><a href="https://github.com/visha-r/nodeproject/blob/master/app.js" target="_blank">Node.js Source</a></div>
+        <h2>References</h2>
+        <div><a href="https://www.youtube.com/watch?v=WGnQAgk2dz4" target="_blank"> Youtube Lecture </a></div>
+    </div>
+</body>
+</html>

@@ -8,7 +8,7 @@
         		<label> Product Id </label>
         	</td>
         	<td>
-        		<input class="form-control" ng-model="product.id" ng-disabled="flag"
+        		<input class="form-control" ng-model="product.id"
         		placeholder="Please enter 7 digit number"/>
         	</td>
         	<td>
@@ -39,6 +39,14 @@
         	</td>
         	<td colspan="3">
         		<input class="form-control" ng-model="product.shortDesc" />
+        	</td>
+        </tr>
+        <tr>
+        	<td>
+        		<label> Product Image </label>
+        	</td>
+        	<td colspan="3">
+        		<input class="form-control" ng-model="product.image" placeholder="Please provide a link to product image if you have any, otherwise leave it blank"/>
         	</td>
         </tr>
          <tr>
@@ -100,15 +108,12 @@
                     	<button ng-click="populateProduct(product)" class="btn btn-warning">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </button> <br/>
-                        <button ng-click="addToFavorites(product)" class="btn btn-info">
-                            <span class="glyphicon glyphicon-star"></span>
+                        <button ng-click="remove(product)" class="btn btn-info">
+                            <span class="glyphicon glyphicon-remove"></span>
                         </button><br/>
-                        <a href="#/reviews/{{product.id}}" class=" btn btn-default">
+                        <a href="#/reviews/{{$index}}" class=" btn btn-default">
                             <span class="glyphicon glyphicon-comment"></span>
                         </a>
-                        <button ng-click="addToCart(product)" class=" btn btn-success">
-                            Add to <span class="glyphicon glyphicon-shopping-cart"></span>
-                        </button>
                     </td>
                 </tr>
             </tbody>

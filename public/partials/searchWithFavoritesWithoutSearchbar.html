@@ -1,24 +1,4 @@
-﻿<div class="instructions">
-     Please be patient, while your search populates the result as it will take sometime.
-</div>
-<div class="tablediv row">
-    <div class="col-sm-2">
-    </div>
-    <div class="col-sm-8">
- 	<div class="search-wrapper input-group">
-            <label for="title">Manufacturer Name : </label>
-                <input type="text" class="title search-box" name="focus" size="65" ng-model="title" placeholder="Enter any manufacturer name like Apple, Samsung, Nokia etc.. and wait for few seconds.." />
-                
-                <span class="input-group-btn">
-                    <button ng-click="fetchProducts()" class="btn btn-default" type="button">Go!</button>
-                </span>
-    </div>
-    </div>
-    <div class="col-sm-2">
-    </div>
- </div>      
-        
-<div class="tablediv row">
+﻿<div class="tablediv row">
     <div class="col-sm-2">
     </div>
     <div class="col-sm-8">
@@ -56,6 +36,9 @@
                     <td>
                         <button ng-click="addToFavorites(product.sku)" class="btn btn-warning">
                             Add to Favorites
+                        </button>
+                        <button ng-click="addToCart(product.sku)" class=" btn btn-success">
+                            Add to cart
                         </button>
                     </td>
                 </tr>

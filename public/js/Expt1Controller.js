@@ -12,23 +12,45 @@ app.config(function ($routeProvider) {
      })
 
      .when('/search', {
-         templateUrl: 'partials/SearchProductDetails.html',
+         templateUrl: 'partials/addProductWithEdit.html',
          controller: 'searchController'
      })
 
 });
 
 app.controller('searchController', function ($scope, $http, ProductService) {
-	$('.product').change(function () {
-        var sku = $(".product :selected").val();
-    	console.log(sku);
-        $http.get("/getDetails/"+sku)
+		$scope.flag = false;
+		
+        ProductService.fetch()
         	.success(function(response){
-        		$scope.product = response[0];
-                console.log($scope.product);
+        		$scope.products = response;
         	});
         
-    });
+        $scope.add = function(product){
+        ProductService.addProduct(product)	
+    	.success(function(response){
+    		$scope.products = response;
+    	});
+        };
+    	
+    	$scope.remove = function (product){
+    		ProductService.removeProduct(product)
+        	.success(function(response){
+        		$scope.products = response;
+        	});
+    };
+    
+    $scope.populateProduct = function(product){
+    	$scope.flag = true;
+    	$scope.product = product;
+    }
+    
+    $scope.update = function(product){
+    	ProductService.updateProduct(product)
+    	.success(function(response){
+    		$scope.products = response;
+    	});
+    }
 });
 
 
