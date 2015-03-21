@@ -1,37 +1,105 @@
 var express = require('express');
 var mongoose = require('mongoose');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 var bodyParser = require('body-parser');
 var multer = require('multer');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 
 var app = express();
+app.use(cookieParser())
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({ secret: 'this is the secret' }));
+app.use(multer());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.use(multer()); // for parsing multipart/form-data
 
 var connectionString = process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost/Experiment1';
 mongoose.connect(connectionString);
 
 var ProductSchema = new mongoose.Schema(
-		{ id: Number, name: String , image: String , salePrice: Number , 
-			regularPrice : Number, shortDesc:String, reviews:[ReviewSchema]});
+		{ sku: Number, name: String , image: String , salePrice: Number , 
+			regularPrice : Number, shortDescription:String, reviews:[ReviewSchema]});
 
 var ReviewSchema = new mongoose.Schema(
 		{
-			title:String, reviewer:String, description:String, reviewDate: Date
+			sku:Number, title:String, reviewer:[ReviewerSchema], comment:String, submissionTime:Date, rating: Number, local:Boolean
+		}
+		);
+
+var CartSchema = new mongoose.Schema(
+		{
+			id:Number
+		}
+		);
+
+var FavoriteSchema = new mongoose.Schema(
+		{
+			id:Number
 		}
 		);
 
 var UserSchema = new mongoose.Schema(
 		{ 
-			firstname: String, lastname: String, email: String, username: String, password : String, favorites :[Number], cart : [Number]
+			firstname: String, lastname: String, email: String, username: String, 
+			password : String, country : String, address : String, phone : Number,
+			favorites :[FavoriteSchema], cart : [CartSchema], reviews:[ReviewSchema]
 		});
+
+var ReviewerSchema = new mongoose.Schema(
+		{
+			name:String
+		}
+		);
 
 var Productmodel = mongoose.model("Productmodel", ProductSchema);
 var Usermodel = mongoose.model("Usermodel", UserSchema);
 
-var user1 = new Usermodel({username:"admin", password:"admin", favorites:[], cart:[]});
-user1.save();
+passport.use(new LocalStrategy(
+		function(username, password, done)
+		{
+			Usermodel.findOne({username:username, password:password}, function(err, user){
+					if(user){
+						console.log(user);
+						return done(null, user);
+					}
+					return done(null, false, {message: 'Unable to login'});
+				})
+		}));
+
+passport.serializeUser(function(user, done) {
+	done(null, user);
+});
+passport.deserializeUser(function(user, done) {
+	done(null, user);
+});
+
+var auth = function(req, res, next)
+{
+	if (!req.isAuthenticated())
+		res.send(401);
+	else
+		next();
+};
+
+app.get('/loggedin', function(req, res)
+		{
+	res.send(req.isAuthenticated() ? req.user : '0');
+		});
+
+app.post('/user/login', passport.authenticate('local'), function(req, res)
+		{
+	res.send(req.user);
+		});
+
+app.post('/user/logout', function(req, res)
+		{
+	req.logOut();
+	res.send(200);
+		});
 
 app.get('/getDetails/:sku', function(req,res){
 	Productmodel.find({id:req.params.sku}, function(err,data){
@@ -78,41 +146,95 @@ app.post('/product/add', function(req,res){
 app.post('/user/register', function(req,res){
 	var user = new Usermodel(req.body);
 	user.save(function (err, doc){
+		res.json(err);
 		})
 });
 
-
 app.put('/product/update/:id', function (req, res) {
-	console.log('inside update');
-	Productmodel.update({_id:req.params.id},{$set:req.body}, function(err, data){
-		Productmodel.find(function(err, result){
-			res.json(result);
+	Productmodel.findById(req.params.id, function(err, data){
+		data.sku = req.body.sku;
+		data.name = req.body.name;
+		data.image = req.body.image;
+		data.salePrice = req.body.salePrice;
+		data.regularPrice = req.body.regularPrice;
+		data.shortDescription = req.body.shortDescription;
+		data.reviews = req.body.reviews;
+		data.save(function(err, data){
+			Productmodel.find(function(err, result){
+				console.log(result);
+				res.json(result);
+			})
+			
 		})
 	})
 });
 
 app.put('/product/addReview/:id', function (req, res) {
-	Productmodel.update({_id:req.params.id},{$set:req.body}, function(err, data){
+	Productmodel.findById(req.params.id, function(err, data){
+		data.sku = req.body.sku;
+		data.name = req.body.name;
+		data.image = req.body.image;
+		data.salePrice = req.body.salePrice;
+		data.regularPrice = req.body.regularPrice;
+		data.shortDescription = req.body.shortDescription;
+		data.reviews = req.body.reviews;
+		data.save(function(err, data){
+			Productmodel.findById(req.params.id, function(err, result){
+				console.log(result);
+			})
+		})
 	})
 });
 
 app.put('/user/addFavorite/:id', function(req,res){
-	Usermodel.update({_id:req.params.id}, {$set:req.body}, function(err,data){
-		console.log(err);
+		Usermodel.findById(req.params.id, function(err, data){
+		data.firstname = req.body.firstname;
+		data.lastname = req.body.lastname;
+		data.username = req.body.username;
+		data.password = req.body.password;
+		data.email = req.body.email;
+		data.favorites = req.body.favorites;
+		data.cart = req.body.cart;
+		data.save(function(err, result){
+			Usermodel.findById(req.params.id, function(err, doc){
+				console.log(doc);
+			})
+		})
 	})
-})
+});
+	
 
 app.put('/user/addToCart/:id', function(req,res){
-	Usermodel.update({_id:req.params.id}, {$set:req.body}, function(err,data){
-		console.log(err);
+	Usermodel.findById(req.params.id, function(err, data){
+		data.firstname = req.body.firstname;
+		data.lastname = req.body.lastname;
+		data.username = req.body.username;
+		data.password = req.body.password;
+		data.email = req.body.email;
+		data.favorites = req.body.favorites;
+		data.cart = req.body.cart;
+		data.save(function(err, result){
+			Usermodel.findById(req.params.id, function(err, doc){
+				console.log(doc);
+			})
+		})
 	})
 })
 
 app.put('/user/updateCart/:id', function(req,res){
-	Usermodel.update({_id:req.params.id}, {$set:req.body}, function(err,data){
-		console.log(err);
-		Usermodel.findById(req.params.id, function(err, result){
-			res.json(result.cart);
+	Usermodel.findById(req.params.id, function(err, data){
+		data.firstname = req.body.firstname;
+		data.lastname = req.body.lastname;
+		data.username = req.body.username;
+		data.password = req.body.password;
+		data.email = req.body.email;
+		data.favorites = req.body.favorites;
+		data.cart = req.body.cart;
+		data.save(function(err, result){
+			Usermodel.findById(req.params.id, function(err, doc){
+				console.log(doc);
+				res.json(doc.cart);
+			})
 		})
 	})
 })
@@ -126,6 +248,60 @@ app.delete('/product/remove/:id', function(req,res){
 	})
 })
 });
+
+app.post('/new/user/register', function(req,res){
+	var user = new Usermodel(req.body);
+	user.save(function (err, user){
+		res.json(err);
+		})
+});
+
+app.get('/user/details/:username', function(req,res){
+	Usermodel.find(function(err,users){
+		for(i in users){
+			if(users[i].username == req.params.username){
+				res.json(users[i]);
+			}
+		}
+	})
+});
+
+app.post('/product/addReview', function (req, res) {
+	var product = new Productmodel(req.body);
+	product.save(function (err, doc){
+		console.log(req.body);
+		res.json(req.body);
+		})
+});
+
+app.put('/product/updateReview/:id', function (req, res) {
+	Productmodel.findById(req.params.id, function(err, data){
+		data.reviews = req.body.reviews;
+		data.save(function(err, result){
+			Productmodel.findById(req.params.id, function(err, doc){
+				console.log(doc.reviews);
+				res.json(doc.reviews);
+			})
+		})
+	})
+});
+
+app.put('/user/addReview/:id', function(req,res){
+	Usermodel.findById(req.params.id, function(err, data){
+	data.reviews = req.body.reviews;
+	data.save(function(err, result){
+		Usermodel.findById(req.params.id, function(err, doc){
+			res.json(doc.reviews);
+		})
+	})
+})
+});
+
+app.get('/product/fetchAll', function(req,res){
+	Productmodel.find(function(err,products){
+		res.json(products);
+	})
+})
 
 var ip = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;

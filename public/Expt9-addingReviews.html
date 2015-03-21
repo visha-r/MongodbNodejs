@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visha's Experiments</title>
+    <script type="text/javascript" src="js/jquery-1.11.2.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.css" />
+    <script type="text/javascript" src="js/angular.js"></script>
+    <script type="text/javascript" src="js/angular-route.min.js"></script>
+    <script type="text/javascript" src="js/ui-bootstrap-tpls-0.12.1.js"></script>
+    <script type="text/javascript" src="js/Expt9Controller.js"></script>
+    <script type="text/javascript" src="js/NewProductService.js"></script>
+    <script type="text/javascript" src="js/UserService.js"></script>
+    <link rel="stylesheet" href="stylesheets/style.css" />
+</head>	
+<body ng-app="AngularApp">
+    <div class="main-wrapper">
+        <h1>Experiment 4 - Adding and rendering local reviews with remote reviews </h1>
+        <div class="demo-wrapper">
+            <h2>Experiment to add local reviews and rendering both local and remote reviews</h2>
+            <div class="instructions">
+            <ul>
+            <li> Browse through the product </li>
+            <li> Go to the details page </li>
+            <li> Select the 'Ratings & Reviews' tab in the details page </li>
+            <li> Register into the application and login to write your own review for a product </li>
+            </ul>
+            </div>
+            <div class="container">
+        	<nav class="navbar navbar-inverse" ng-controller="MainController">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>                        
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand active" href="#/home">Online Shopping</a>
+                    <ul class="nav navbar-nav">
+                        <li id="homelink"><a href="#/home">Home<span class="sr-only">(current)</span></a></li>
+                        <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search by Category <b class="caret"></b></a>
+                    <ul class="dropdown-menu multi-level">
+                        
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Laptops</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/search/MOBILE COMPUTING/Lenovo">Lenovo</a></li>
+                                <li class="divider"></li>
+                                <li ><a href="#/search/MOBILE COMPUTING/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MOBILE COMPUTING/Dell">Dell</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MOBILE COMPUTING/Acer">Acer</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MOBILE COMPUTING/Asus">Asus</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Mobile Phones</a>
+                            <ul class="dropdown-menu">
+                                 <li ><a href="#/search/SPRINT HARDWARE/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/SPRINT HARDWARE/Nokia">Nokia</a></li>
+                                 <li class="divider"></li>
+                                <li><a href="#/search/SPRINT HARDWARE/Blackberry">Blackberry</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Microwaves</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/search/MICROWAVE/Frigidaire">Frigidaire</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MICROWAVE/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MICROWAVE/LG">LG</a></li>
+                                 <li class="divider"></li>
+                                <li><a href="#/search/MICROWAVE/Panasonic">Panasonic</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Washer and Dryers</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/search/LAUNDRY/Whirlpool">Whirlpool</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/LAUNDRY/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/LAUNDRY/LG">LG</a></li>
+                                 <li class="divider"></li>
+                                <li><a href="#/search/LAUNDRY/GE">GE</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                        <li id="favoritelink"><a href="#/profile">My Account</a></li>
+                    </ul>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                            
+                            <ul class="nav navbar-nav navbar-right" ng-show="currentuser">
+                                <li style="color:whitesmoke">Hello &nbsp;&nbsp;{{currentuser}}</li>
+                                <li><a href="#/logout" ng-click="logout()">Logout</a></li>
+                            </ul>
+                            
+                            <ul class="nav navbar-nav navbar-right" ng-show="!currentuser">
+                        	<li id="registerlink"><a href="#/register"><span style="color:whitesmoke">Sign up</span></a></li>
+                        	<li id="loginlink"><a href="#/login"><span style="color:whitesmoke">Login</span></a></li>
+                        	</ul>
+
+                </div><!--/.navbar-collapse -->
+        </nav>
+        <div ng-view>
+
+        </div>
+    	</div>
+        </div>
+        <h2>About the experiment</h2>
+        <p id="text">
+        	This is a very interesting experiment which combines local data with remote data. This experiment lets users to add their
+        	own reviews to a product. Since the remote web service does not give any option to update its database, these reviews
+        	are stored in the local database. The review is added in the product collection. When a remote call is made to fetch the
+        	reviews of a product, it is also checked locally if there is any local review for the same product. If there is any, both
+        	lists are concatenated rendering everything. If there is no local review for the product, only the remote ones are displayed
+        	and vice versa.
+        	<br />
+            <br />
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                    	<b>// if the products doesn't have any local reviews already, a new review will be created </b> <br/>
+                        if(jQuery.isEmptyObject(localProduct)){ <br/>
+						var localReview = []; <br/>
+						localReview.push(myReview); <br/>
+						localProduct = {sku: sku, reviews:localReview}; <br/>
+						ProductService.addProductReview(localProduct, function(response){ <br/>
+							}) <br/>
+						} <br/>
+						<b>// if the product already has local reviews, the current review will be pushed to it </b> <br/>
+						else <br/>
+						{ <br/>
+							localProduct.reviews.push(myReview); <br/>
+							ProductService.updateProductReview(localProduct, function(response){ <br/>
+						}) <br/>
+						} <br/>
+					})  <br/>
+                    </td>
+                </tr>
+            </table>
+        </p>
+        <h2>Source Code</h2>
+        <div><a href="https://github.com/visha-r/MongodbNodejs/blob/master/app.js" target="_blank">Server Source</a></div>
+        <div><a href="https://github.com/visha-r/MongodbNodejs/blob/master/public/js/NewProductService.js" target="_blank"> Angular Service</a></div>
+        <div><a href="https://github.com/visha-r/MongodbNodejs/blob/master/public/js/Expt8Controller.js" target="_blank">Controller </a></div>
+        <h2>References</h2>
+        <div><a href="https://www.youtube.com/watch?v=8GL5WpQ0vfo" target="_blank"> Prof. Jose's Lecture </a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visha's Experiments</title>
+    <script type="text/javascript" src="js/jquery-1.11.2.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.css" />
+    <script type="text/javascript" src="js/angular.js"></script>
+    <script type="text/javascript" src="js/angular-route.min.js"></script>
+    <script type="text/javascript" src="js/ui-bootstrap-tpls-0.12.1.js"></script>
+    <script type="text/javascript" src="js/Expt7Controller.js"></script>
+    <script type="text/javascript" src="js/NewProductService.js"></script>
+    <script type="text/javascript" src="js/UserService.js"></script>
+    <link rel="stylesheet" href="stylesheets/style.css" />
+</head>	
+<body ng-app="AngularApp">
+    <div class="main-wrapper">
+        <h1> Experiment 2 - Product details page design</h1>
+        <div class="demo-wrapper">
+            <h2>Experiment to design product details page</h2>
+            <div class="instructions">
+            
+            	Browse through the products and view the product details by clicking on the link(product name) in the search result page
+            
+            </div>
+            <div class="container">
+        	<nav class="navbar navbar-inverse" ng-controller="MainController">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>                        
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand active" href="#/home">Online Shopping</a>
+                    <ul class="nav navbar-nav">
+                        <li id="homelink"><a href="#/home">Home<span class="sr-only">(current)</span></a></li>
+                        <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search by Category <b class="caret"></b></a>
+                    <ul class="dropdown-menu multi-level">
+                        
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Laptops</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/search/MOBILE COMPUTING/Lenovo">Lenovo</a></li>
+                                <li class="divider"></li>
+                                <li ><a href="#/search/MOBILE COMPUTING/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MOBILE COMPUTING/Dell">Dell</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MOBILE COMPUTING/Acer">Acer</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MOBILE COMPUTING/Asus">Asus</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Mobile Phones</a>
+                            <ul class="dropdown-menu">
+                                 <li ><a href="#/search/SPRINT HARDWARE/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/SPRINT HARDWARE/Nokia">Nokia</a></li>
+                                 <li class="divider"></li>
+                                <li><a href="#/search/SPRINT HARDWARE/Blackberry">Blackberry</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Microwaves</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/search/MICROWAVE/Frigidaire">Frigidaire</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MICROWAVE/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MICROWAVE/LG">LG</a></li>
+                                 <li class="divider"></li>
+                                <li><a href="#/search/MICROWAVE/Panasonic">Panasonic</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Washer and Dryers</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/search/LAUNDRY/Whirlpool">Whirlpool</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/LAUNDRY/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/LAUNDRY/LG">LG</a></li>
+                                 <li class="divider"></li>
+                                <li><a href="#/search/LAUNDRY/GE">GE</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                        <li id="favoritelink"><a href="#/profile">My Account</a></li>
+                    </ul>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                            
+                            <ul class="nav navbar-nav navbar-right" ng-show="currentuser">
+                                <li style="color:whitesmoke">Hello &nbsp;&nbsp;{{currentuser}}</li>
+                                <li><a href="#/logout" ng-click="logout()">Logout</a></li>
+                            </ul>
+                            
+                            <ul class="nav navbar-nav navbar-right" ng-show="!currentuser">
+                        	<li id="registerlink"><a href="#/register"><span style="color:whitesmoke">Sign up</span></a></li>
+                        	<li id="loginlink"><a href="#/login"><span style="color:whitesmoke">Login</span></a></li>
+                        	</ul>
+
+                </div><!--/.navbar-collapse -->
+        </nav>
+        <div ng-view>
+
+        </div>
+    	</div>
+        </div>
+        <h2>About the experiment</h2>
+        <p id="text">
+        	<div>The experiment is focused on designing the product details page where the user can see all the features of the
+        	 given product along with its specification. The page also displays the amount the user will save on buying a 
+        	 particular product.The page has 2 tabs one of which lists the specifications and the other product features.
+        	 The user also has an option to add the current product to his cart. But then the user will be forced to login if
+        	 he tries to add a product without logging in. Otherwise upon adding the product to the cart successfully, the user
+        	 will be redirected to his profile where he can see his favorites and cart.
+        	 </div><br/>
+        	 Bootstrap.ui tabs has been used to display the tab. ui.bootstrap is added as a dependency in the controller as follows : 
+        	<br />
+            <br />
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                        var app = angular.module('AngularApp', ['ngRoute', 'ui.bootstrap']);
+                    </td>
+                </tr>
+            </table>
+        </p>
+        <h2>Source Code</h2>
+        <div><a href="https://github.com/visha-r/MongodbNodejs/blob/master/app.js" target="_blank">Server Source</a></div>
+        <div><a href="https://github.com/visha-r/MongodbNodejs/blob/master/public/js/NewProductService.js" target="_blank"> Angular Service</a></div>
+        <div><a href="https://github.com/visha-r/MongodbNodejs/blob/master/public/js/Expt7Controller.js" target="_blank">Controller </a></div>
+        <h2>References</h2>
+        <div><a href="https://www.youtube.com/watch?v=8GL5WpQ0vfo" target="_blank"> Prof. Jose's lecture</a></div>
+        <div><a href="http://angular-ui.github.io/bootstrap/" target="_blank">Angular bootstrap</a></div>
+    </div>
+</body>
+</html>
