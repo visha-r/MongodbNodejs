@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visha's Experiments</title>
+    <script type="text/javascript" src="js/jquery-1.11.2.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.css" />
+    <script type="text/javascript" src="js/angular.js"></script>
+    <script type="text/javascript" src="js/angular-route.min.js"></script>
+    <script type="text/javascript" src="js/ui-bootstrap-tpls-0.12.1.js"></script>
+    <script type="text/javascript" src="js/Expt14Controller.js"></script>
+    <script type="text/javascript" src="js/Week8ProductService.js"></script>
+    <script type="text/javascript" src="js/Week8UserService.js"></script>
+    <link rel="stylesheet" href="stylesheets/style.css" />
+</head>	
+<body ng-app="AngularApp">
+    <div class="main-wrapper">
+        <h1> Experiment 4 - Redirecting user to the appropriate tab </h1>
+        <div class="demo-wrapper">
+            <h2> Experiment to redirect user to the appropriate tab based on his activity</h2>
+            <div class="instructions">
+            <ul>
+            <li> Login to the application </li>
+            <li> You can see yourself getting redirected to the 'User information' tab in the profile page</li>
+            <li> Add a product to your cart from any page that has 'Add to cart' button. You will be redirected
+            to the cart tab in account page showing the product you just added. </li>
+            <li> Add a product to your favorites from any page that has 'Add to favorites' button. You will be redirected
+            to the favorites tab in account page showing the product you just added. </li>
+            </ul>
+            </div>
+            <div class="container">
+        	<nav class="navbar navbar-inverse" ng-controller="MainController">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>                        
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <ul class="nav navbar-nav">
+                        <li id="homelink"><a href="#/home">Home<span class="sr-only">(current)</span></a></li>
+                        <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search by Category <b class="caret"></b></a>
+                    <ul class="dropdown-menu multi-level">
+                        
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Laptops</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/search/MOBILE COMPUTING/Lenovo">Lenovo</a></li>
+                                <li class="divider"></li>
+                                <li ><a href="#/search/MOBILE COMPUTING/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MOBILE COMPUTING/Dell">Dell</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MOBILE COMPUTING/Acer">Acer</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MOBILE COMPUTING/Asus">Asus</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Mobile Phones</a>
+                            <ul class="dropdown-menu">
+                                 <li ><a href="#/search/SPRINT HARDWARE/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/SPRINT HARDWARE/Nokia">Nokia</a></li>
+                                 <li class="divider"></li>
+                                <li><a href="#/search/SPRINT HARDWARE/Blackberry">Blackberry</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Microwaves</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/search/MICROWAVE/Frigidaire">Frigidaire</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MICROWAVE/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MICROWAVE/LG">LG</a></li>
+                                 <li class="divider"></li>
+                                <li><a href="#/search/MICROWAVE/Panasonic">Panasonic</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Washer and Dryers</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/search/LAUNDRY/Whirlpool">Whirlpool</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/LAUNDRY/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/LAUNDRY/LG">LG</a></li>
+                                 <li class="divider"></li>
+                                <li><a href="#/search/LAUNDRY/GE">GE</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                        <li id="favoritelink" ng-show="currentuser" ><a href="#/profile/user">My Account</a></li>
+                    </ul>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                            
+                            <ul class="nav navbar-nav navbar-right" ng-show="currentuser">
+                                <li style="color:whitesmoke">Welcome &nbsp;&nbsp;{{user.firstname}}</li>
+                                <li role="presentation"><a href="#/profile/cart"> 
+                                <span class="glyphicon glyphicon-shopping-cart"></span>
+                                <span class="badge">{{cartCount}}</span></a></li>
+                                <li><a href="#/logout" ng-click="logout()">Logout</a></li>
+                            </ul>
+                            
+                            <ul class="nav navbar-nav navbar-right" ng-show="!currentuser">
+                        	<li id="registerlink"><a href="#/register"><span style="color:whitesmoke">Sign up</span></a></li>
+                        	<li id="loginlink"><a href="#/login"><span style="color:whitesmoke">Login</span></a></li>
+                        	</ul>
+
+                </div><!--/.navbar-collapse -->
+        </nav>
+        <div ng-view>
+
+        </div>
+    	</div>
+        </div>
+        <h2>About the experiment</h2>
+        <p id="text">
+        	This experiment is about redirecting user to the right tab based on the activity he carries out. This is a very important
+        	feature as this makes the application very user friendly. Everytime the user adds a product to his cart or favorites list,
+        	he should be given some hint that his activity was successful showing the status of the transaction he just made. This
+        	experiment is focused on doing that. So whenever the user adds a product to his cart or favorite, he wil be redirected to the
+        	corresponding tab in the account page. I maintain a variable for each tab which will be passed along while redirecting the
+        	user to his profile page. The variable value depends on the activity he carries out. In the html, I use this value to make
+        	the tabs active.
+            <br />
+            For example, on adding a product to the cart, I make the direction as follows :
+            <br />
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                    ProductService.addToCart($scope.user); <br/>
+					$location.url('/profile/'+&quot;cart&quot;);
+                    
+                    </td>
+                </tr>
+            </table>
+            Here the value cart in the url says that, the user has to be redirected to the cart tab in the profile page. In the controller
+            I add the active class to the tab based on the incoming value as follows :
+            <br />
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                    var tab = $routeParams.activeTab; <br/>
+    
+    if(tab == 'favorite'){ <br/>
+    	$scope.favActive = true; <br/>
+    } <br/>
+    else if(tab == 'cart'){ <br/>
+    	$scope.cartActive = true; <br/>
+    } <br/>
+    else if(tab == 'review'){ <br/>
+    	$scope.reviewActive = true; <br/>
+    } <br/>
+    else if(tab == 'network'){ <br/>
+    	$scope.networkActive = true; <br/>
+    } <br/>
+    else { <br/>
+    	$scope.userActive = true; <br/>
+    }<br/>
+                    
+                    </td>
+                </tr>
+            </table>
+            
+        </p>
+        <h2>Source Code</h2>
+        <div><a href="https://github.com/visha-r/MongodbNodejs/blob/master/app.js" target="_blank">Server</a></div>
+        <div><a href="https://github.com/visha-r/MongodbNodejs/blob/master/public/js/Expt14Controller.js" target="_blank">Controller </a></div>
+        <div><a href="https://github.com/visha-r/MongodbNodejs/blob/master/public/js/Week8ProductService.js" target="_blank"> Angular Service</a></div>
+        <h2>References</h2>
+        <div>No references</div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<div class="col-sm-8" ng-show="!user">
+ <span class="instructions"> Sorry the user's profile is currently unavailable :-(</span>
+</div>
+<div ng-show="user">
+    <div class="row">
+        <div class=" col-sm-6">
+        </div>
+        <div class="col-sm-6">
+            <h3> {{user.firstname}}'s profile</h3>
+        </div>
+    </div>
+    <div class="tablediv row">
+        <div class="col-sm-2">
+        </div>
+        <div class="col-sm-8">
+        <tabset justified="true">
+    		<tab heading="User Information">
+    			<table class="table table-striped table-hover table-bordered table-responsive">
+                <tbody>
+                    <tr>
+                        <td width="35%"> <b>First Name </b></td> <td width="65%"> {{user.firstname}}</td>
+                    </tr>
+                    <tr>
+                        <td > <b>Last Name </b></td> <td > {{user.lastname}}</td>
+                    </tr>
+                    <tr>
+                        <td > <b>Email </b></td> <td > {{user.email}}</td>
+                    </tr>
+                    <tr>
+                        <td > <b>Country </b></td> <td > {{user.country}}</td>
+                    </tr>
+                </tbody>
+            </table>
+    		</tab>
+        	<tab heading="Favorites">
+				 <table class="table table-striped table-hover table-bordered table-responsive" ng-show="favoriteProducts">
+         				
+            <thead>
+                <tr>
+                    <th>
+                        Product Image
+                    </th>
+                    <th>
+                        Product description
+                    </th>
+                    <th>
+                        Price details
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="product in favoriteProducts">
+                    <td width="20%" class="prdtimg"><img class="centeredImg" ng-src="{{product.image}}" 
+                    alt="Image currently unavailable"></td>
+                    <td width="60%">
+                        <a href="#/viewDetails/{{product.sku}}"> <h4><b>{{product.name}}</b></h4> </a>
+                        <p><b>Product Id: </b>{{product.sku}}</p>
+                        <p><b>Short Description:</b> {{product.shortDescription}}</p>
+                        <p ng-show="product.customerReviewAverage"><b>Customer rating :</b> {{product.customerReviewAverage}} out of 5</p>
+                    </td>
+                    <td width="30%" class="priceDetails">
+                        <div class="salePrice"> ${{product.salePrice}} </div>
+                        <div ng-if="(product.regularPrice - product.salePrice) > 0"> ON SALE </div>
+                        <div class="regularPrice"> (Reg. price: ${{product.regularPrice}}) </div>
+                        <div ng-if="(product.regularPrice - product.salePrice) > 0">
+                        	<div class="savings"> You save ${{product.regularPrice - product.salePrice}}!! </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            
+        	</table>
+    		</tab>
+    	</tabset>
+        </div>
+        <div class="col-sm-2">
+        </div>
+    </div>
+</div>

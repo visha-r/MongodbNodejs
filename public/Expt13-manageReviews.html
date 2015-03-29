@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visha's Experiments</title>
+    <script type="text/javascript" src="js/jquery-1.11.2.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.css" />
+    <script type="text/javascript" src="js/angular.js"></script>
+    <script type="text/javascript" src="js/angular-route.min.js"></script>
+    <script type="text/javascript" src="js/ui-bootstrap-tpls-0.12.1.js"></script>
+    <script type="text/javascript" src="js/Expt13Controller.js"></script>
+    <script type="text/javascript" src="js/Week8ProductService.js"></script>
+    <script type="text/javascript" src="js/Week8UserService.js"></script>
+    <link rel="stylesheet" href="stylesheets/style.css" />
+</head>	
+<body ng-app="AngularApp">
+    <div class="main-wrapper">
+        <h1> Experiment 3 - Managing user's local reviews</h1>
+        <div class="demo-wrapper">
+            <h2> Managing user's local reviews by updating the product and the user</h2>
+            <div class="instructions">
+            <ul>
+            <li> Login to the application </li>
+            <li> Write a review for a product</li>
+            <li> See the review appearing in your account </li>
+            <li> Delete the review by clicking the delete link </li>
+            </ul>
+            </div>
+            <div class="container">
+        	<nav class="navbar navbar-inverse" ng-controller="MainController">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>                        
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <ul class="nav navbar-nav">
+                        <li id="homelink"><a href="#/home">Home<span class="sr-only">(current)</span></a></li>
+                        <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search by Category <b class="caret"></b></a>
+                    <ul class="dropdown-menu multi-level">
+                        
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Laptops</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/search/MOBILE COMPUTING/Lenovo">Lenovo</a></li>
+                                <li class="divider"></li>
+                                <li ><a href="#/search/MOBILE COMPUTING/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MOBILE COMPUTING/Dell">Dell</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MOBILE COMPUTING/Acer">Acer</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MOBILE COMPUTING/Asus">Asus</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Mobile Phones</a>
+                            <ul class="dropdown-menu">
+                                 <li ><a href="#/search/SPRINT HARDWARE/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/SPRINT HARDWARE/Nokia">Nokia</a></li>
+                                 <li class="divider"></li>
+                                <li><a href="#/search/SPRINT HARDWARE/Blackberry">Blackberry</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Microwaves</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/search/MICROWAVE/Frigidaire">Frigidaire</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MICROWAVE/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MICROWAVE/LG">LG</a></li>
+                                 <li class="divider"></li>
+                                <li><a href="#/search/MICROWAVE/Panasonic">Panasonic</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Washer and Dryers</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/search/LAUNDRY/Whirlpool">Whirlpool</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/LAUNDRY/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/LAUNDRY/LG">LG</a></li>
+                                 <li class="divider"></li>
+                                <li><a href="#/search/LAUNDRY/GE">GE</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                        <li id="favoritelink" ng-show="currentuser" ><a href="#/profile">My Account</a></li>
+                    </ul>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                            
+                            <ul class="nav navbar-nav navbar-right" ng-show="currentuser">
+                                <li style="color:whitesmoke">Welcome &nbsp;&nbsp;{{user.firstname}}</li>
+                                <li role="presentation"><a href="#/profile/cart"> 
+                                <span class="glyphicon glyphicon-shopping-cart"></span>
+                                <span class="badge">{{cartCount}}</span></a></li>
+                                <li><a href="#/logout" ng-click="logout()">Logout</a></li>
+                            </ul>
+                            
+                            <ul class="nav navbar-nav navbar-right" ng-show="!currentuser">
+                        	<li id="registerlink"><a href="#/register"><span style="color:whitesmoke">Sign up</span></a></li>
+                        	<li id="loginlink"><a href="#/login"><span style="color:whitesmoke">Login</span></a></li>
+                        	</ul>
+
+                </div><!--/.navbar-collapse -->
+        </nav>
+        <div ng-view>
+
+        </div>
+    	</div>
+        </div>
+        <h2>About the experiment</h2>
+        <p id="text">
+        	This experiment is about adding and managing the local reviews. Though this experiment appears to very simple, it is very
+        	tricky as the reviews displayed are from both the local and from the remote database. When a review is added it is added
+        	for both the product and the user as it is a local review. To display the reviews for a product, all its associated local
+        	reviews are displayed along with the remote ones. To display the reviews for a user, reviews in his profile are displayed.
+            <br />
+            Similarly when a review is removed, it has to be removed both from the user's reviews list and product's reviews list. The
+            deletion of the review is carried out as follows :
+            <br />
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                    
+                    	  	// deletes the review the user has written <br/>
+	
+    $scope.removeReview = function(product,index){ <br/>
+    	UserService.getUserDetails($scope.username, function(response){ <br/>
+    		var ptr = 0; <br/>
+    		for(var i in response.reviews){ <br/>
+    			if(response.reviews[i]._id == product.userReview._id){ <br/>
+    				ptr = i; <br/>
+    				break; <br/>
+    			} <br/>
+    		} <br/>
+    		response.reviews.splice(ptr,1); <br/>
+    		$scope.reviewedProducts.splice(index,1); <br/>
+    		var updatedProduct = {}; <br/>
+    		ProductService.addReviews(response, function(result){ <br/>
+    			console.log(result); <br/>
+    		}); <br/>
+    			ProductService.fetchProducts(function(products){ <br/>
+    				console.log(products); <br/>
+    				for(var i in products){ <br/>
+    					(function(i){ <br/>
+    						if(products[i].sku == product.sku){ <br/>
+    					<br/>
+    						for(var j in products[i].reviews){ <br/>
+    							if(products[i].reviews[j].submissionTime == product.userReview.submissionTime) <br/>
+    								{ <br/>
+    								updatedProduct = products[i]; <br/>
+    								updatedProduct.reviews.splice(j,1); <br/>
+    								break; <br/>
+    								} <br/>
+    						} <br/>
+    					} <br/>
+    				})(i); <br/>
+    				} <br/>
+    				ProductService.updateProductReview(updatedProduct, function(response){ <br/>
+    				}) <br/>
+    			}) <br/>
+    	}) <br/>
+    }; <br/>
+                    
+                    </td>
+                </tr>
+            </table>
+            
+        </p>
+        <h2>Source Code</h2>
+        <div><a href="https://github.com/visha-r/MongodbNodejs/blob/master/app.js" target="_blank">Server</a></div>
+        <div><a href="https://github.com/visha-r/MongodbNodejs/blob/master/public/js/Expt13Controller.js" target="_blank">Controller </a></div>
+        <div><a href="https://github.com/visha-r/MongodbNodejs/blob/master/public/js/Week8ProductService.js" target="_blank"> Angular Service</a></div>
+        <h2>References</h2>
+        <div>No references</div>
+    </div>
+</body>
+</html>

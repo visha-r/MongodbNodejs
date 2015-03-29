@@ -1,0 +1,100 @@
+ <div class="col-sm-1"></div>
+ <div class="container">
+ <div class="col-sm-10 jumbotron">
+<form ng-app="AngularApp" ng-controller="registerController" class="form-horizontal" name="myForm" novalidate ng-submit="register()">
+  	<div style="text-align: center" class="instructions"> Registration Form</div> <br/>
+	<div class="successMsg" ng-hide="errMsg"> Registration successful!!! </div>
+	<div class="center-align" ng-show="errMsg"> Fields marked with * are mandatory </div>
+	<br/> 
+  <div class="form-group">
+    <label for="firstname" class="col-sm-3 control-label left-align">First Name&nbsp;&nbsp;*</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" ng-model="user.firstname" name="firstname" placeholder="Firstname" required>
+      <span class="error" ng-show="myForm.firstname.$dirty && myForm.firstname.$error.required">
+  		* First Name is required.
+  	  </span>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label for="lastname" class="col-sm-3 control-label left-align">Last Name &nbsp;&nbsp; </label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" ng-model="user.lastname" name="lastname" placeholder="Lastname">
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label for="email" class="col-sm-3 control-label left-align">Email&nbsp;&nbsp; *</label>
+    <div class="col-sm-8">
+      <input type="email" class="form-control" ng-model="user.email" name="email" placeholder="example@domain.com" required>
+      <span style="color:red" ng-show="myForm.email.$dirty && myForm.email.$invalid">
+  		<span ng-show="myForm.email.$error.required" class="error">* Email is required.</span>
+  		<span ng-show="myForm.email.$error.email" class="error">* Invalid email address.</span>
+  	</span>
+    </div>
+  </div>
+  
+    <div class="form-group">
+    <label for="addres" class="col-sm-3 control-label left-align">Address</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" ng-model="user.address" id="address" >
+    </div>
+  	</div>
+  	
+  	<div class="form-group">
+    <label for="addres" class="col-sm-3 control-label left-align">Country</label>
+    <div class="col-sm-8">
+      <select ng-model="user.country" class="form-control">
+        <option ng-repeat="country in countryList | orderBy:country.countryName" value="{{country.countryName}}">{{country.countryName}}</option>
+      </select>
+    </div>
+  	</div>
+ 
+  	<div class="form-group">
+    <label for="phone" class="col-sm-3 control-label left-align">Phone Number</label>
+    <div class="col-sm-8">
+      <input type="text" maxlength=10 class="form-control" ng-model="user.phone" id="phone" >
+    </div>
+  	</div>
+  
+  <div class="form-group">
+    <label for="username" class="col-sm-3 control-label left-align">Username &nbsp;&nbsp; *</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" ng-model="user.username" name="username" placeholder="Preferred username" 
+      unique-username required ng-model-options="{ updateOn: 'blur' }">
+      <span ng-show="myForm.username.$dirty && myForm.username.$error.required" class="error">* Username is required.</span>
+      <span ng-show="busy" style="color:green">checking....</span>
+  	  <span ng-if="myForm.$error.isTaken" class="error">* Username exists already</span>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label for="pwd" class="col-sm-3 control-label left-align">Password&nbsp;&nbsp; *</label>
+    <div class="col-sm-8">
+      <input type="password" class="form-control" ng-model="user.password" name="pwd" placeholder="Password" 
+      match="verification" required>
+      <span ng-show="myForm.pwd.$dirty && myForm.pwd.$error.required" class="error">Password is required.</span>
+    </div>
+  </div>
+  
+   <div class="form-group">
+    <label for="pwd" class="col-sm-3 control-label left-align">Re-enter Password&nbsp;&nbsp; *</label>
+    <div class="col-sm-8">
+      <input type="password" class="form-control" name="verification" id="verification" ng-model="verification" 
+      match="user.password" placeholder="Re-enter Password" required>
+      <span ng-show="myForm.verification.$dirty && myForm.verification.$error.required" class="error">Password is required.</span>
+      <span ng-show="myForm.verification.$dirty && myForm.verification.$error.match && !myForm.verification.$error.required" class="error">
+      Passwords don't match.
+      </span>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-8 center-align" >
+      <button type="submit" class="btn btn-default" ng-disabled="myForm.$invalid">Register</button>
+    </div>
+  </div>
+</form>
+</div>
+</div>
+ <div class="col-sm-1"></div>

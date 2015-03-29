@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visha's Experiments</title>
+    <script type="text/javascript" src="js/jquery-1.11.2.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.css" />
+    <script type="text/javascript" src="js/angular.js"></script>
+    <script type="text/javascript" src="js/angular-route.min.js"></script>
+    <script type="text/javascript" src="js/ui-bootstrap-tpls-0.12.1.js"></script>
+    <script type="text/javascript" src="js/Expt15Controller.js"></script>
+    <script type="text/javascript" src="js/Week8ProductService.js"></script>
+    <script type="text/javascript" src="js/Week8UserService.js"></script>
+    <link rel="stylesheet" href="stylesheets/style.css" />
+</head>	
+<body ng-app="AngularApp">
+    <div class="main-wrapper">
+        <h1> Experiment 5 - Following and unfollowing users </h1>
+        <div class="demo-wrapper">
+            <h2> Experiment to follow anf unfollow users creating people network</h2>
+            <div class="instructions">
+            <ul>
+            <li> Register as two different users say 'aaa' and 'bbb' as usernames</li>
+            <li> First login to the application as user 'aaa' </li>
+            <li> Go to any product details page and write a review. Remember the product you just wrote the review. </li>
+            <li> Logout user 'aaa' and login as user 'bbb'. Browse to the details page of the same product you wrote the review. </li>
+            <li> Click the link of the username and click 'follow this user'. See it appears in the list 'people you follow'</li>
+            <li> In the other user's profile this user will appear in 'people who follow you'</li>
+            </ul>
+            </div>
+            <div class="container">
+        	<nav class="navbar navbar-inverse" ng-controller="MainController">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>                        
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <ul class="nav navbar-nav">
+                        <li id="homelink"><a href="#/home">Home<span class="sr-only">(current)</span></a></li>
+                        <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search by Category <b class="caret"></b></a>
+                    <ul class="dropdown-menu multi-level">
+                        
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Laptops</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/search/MOBILE COMPUTING/Lenovo">Lenovo</a></li>
+                                <li class="divider"></li>
+                                <li ><a href="#/search/MOBILE COMPUTING/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MOBILE COMPUTING/Dell">Dell</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MOBILE COMPUTING/Acer">Acer</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MOBILE COMPUTING/Asus">Asus</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Mobile Phones</a>
+                            <ul class="dropdown-menu">
+                                 <li ><a href="#/search/SPRINT HARDWARE/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/SPRINT HARDWARE/Nokia">Nokia</a></li>
+                                 <li class="divider"></li>
+                                <li><a href="#/search/SPRINT HARDWARE/Blackberry">Blackberry</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Microwaves</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/search/MICROWAVE/Frigidaire">Frigidaire</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MICROWAVE/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/MICROWAVE/LG">LG</a></li>
+                                 <li class="divider"></li>
+                                <li><a href="#/search/MICROWAVE/Panasonic">Panasonic</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Washer and Dryers</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/search/LAUNDRY/Whirlpool">Whirlpool</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/LAUNDRY/Samsung">Samsung</a></li>
+                                 <li class="divider"></li>
+                                 <li><a href="#/search/LAUNDRY/LG">LG</a></li>
+                                 <li class="divider"></li>
+                                <li><a href="#/search/LAUNDRY/GE">GE</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                        <li id="favoritelink" ng-show="currentuser" ><a href="#/profile/user">My Account</a></li>
+                    </ul>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                            
+                            <ul class="nav navbar-nav navbar-right" ng-show="currentuser">
+                                <li style="color:whitesmoke">Welcome &nbsp;&nbsp;{{user.firstname}}</li>
+                                <li role="presentation"><a href="#/profile/cart"> 
+                                <span class="glyphicon glyphicon-shopping-cart"></span>
+                                <span class="badge">{{cartCount}}</span></a></li>
+                                <li><a href="#/logout" ng-click="logout()">Logout</a></li>
+                            </ul>
+                            
+                            <ul class="nav navbar-nav navbar-right" ng-show="!currentuser">
+                        	<li id="registerlink"><a href="#/register"><span style="color:whitesmoke">Sign up</span></a></li>
+                        	<li id="loginlink"><a href="#/login"><span style="color:whitesmoke">Login</span></a></li>
+                        	</ul>
+
+                </div><!--/.navbar-collapse -->
+        </nav>
+        <div ng-view>
+
+        </div>
+    	</div>
+        </div>
+        <h2>About the experiment</h2>
+        <p id="text">
+        	This experiment is about creating a network for people though following and unfollowing. When a user say 'x' follows
+        	another used named say 'y', 'y' will appear in 'x' list as the one he follows. In 'y' account, 'x' will appear as his
+        	follower. It is a two way relationship. Similarly when unfollowing the user, the relationship should be cancelled on both
+        	the sides.otherwise it will create inconsistency. When a user selects 'follow this user', the username who is going to be
+        	followed is passed as an argument to his details and update his 'followedBy' with the current user. Also the currentuser's
+        	details are fetched to update his 'follows' array. Current user's 'follows' and the other user's followed by lists are
+        	updated as follows :
+        	
+            <br />
+            <br />
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                   		$scope.followUser = function(){ <br/>
+		UserService.checkLoggedIn(function(result) <br/>
+				{ <br/>
+/	 		// User is Authenticated <br/>
+			if (result !== '0'){ <br/>
+				result.follows.unshift({username:$scope.username}); <br/>
+				$scope.followsAlready = true; <br/>
+				UserService.addFollows(result, function(response){ <br/>
+					UserService.getUserDetails($scope.username, function(response){ <br/>
+						response.followedBy.unshift({username:$scope.currentuser}); <br/>
+						UserService.addFollowedBy(response, function(){ <br/>
+							 <br/>
+						}) <br/>
+						$location.url('/profile/'+&quot;user&quot;); <br/>
+					}) <br/>
+				})	 <br/>		
+			} <br/>
+			else{ <br/>
+				$location.url('/login'); <br/>
+			} <br/>
+				}) <br/>
+	} <br/>
+                    
+                    </td>
+                </tr>
+            </table>
+            Again when unfollowing a user, both 'follows' and 'unfollows' lists are updated as follows :
+            <br />
+            <b>Code Snippet:</b>
+            <br />
+            <br />
+            <table class="code">
+                <tr>
+                    <td width="100%">
+                    	$scope.unfollowUser = function(username){ <br/>
+		UserService.checkLoggedIn(function(result) <br/>
+				{ <br/>
+/		//User is Authenticated <br/>
+			if (result !== '0'){ <br/>
+				//var tempUser = result; <br/>
+				<br/>
+				var ptr = 0; <br/>
+	    		for(var i in result.follows){ <br/>
+	    			if(result.follows[i].username == username){ <br/>
+	    				ptr = i; <br/>
+	    				break; <br/>
+	    			} <br/>
+	    		} <br/>
+	    		result.follows.splice(ptr,1); <br/>
+	    		$scope.user.follows.splice(ptr,1); <br/>
+
+				UserService.addFollows(result, function(response){ <br/>
+					UserService.getUserDetails(username, function(newUser){ <br/>
+						var localUser = newUser; <br/>
+						var ptr1 = 0; <br/>
+			    		for(var i in localUser.followedBy){ <br/>
+			    			if(localUser.followedBy[i].username == result.username){ <br/>
+			    				ptr1 = i; <br/>
+			    				break; <br/>
+			    			} <br/>
+			    		} <br/>
+			    		localUser.followedBy.splice(ptr1,1); <br/>
+						UserService.addFollowedBy(localUser, function(){ <br/>
+							$location.url('/profile/'+"network"); <br/>
+						})<br/>
+					})<br/>
+				})			<br/>
+			}<br/>
+			else{ <br/>
+				$location.url('/login'); <br/>
+			} <br/>
+				})<br/>
+	}<br/>
+                    
+                    </td>
+                </tr>
+            </table>
+            
+        </p>
+        <h2>Source Code</h2>
+        <div><a href="https://github.com/visha-r/MongodbNodejs/blob/master/app.js" target="_blank">Server</a></div>
+        <div><a href="https://github.com/visha-r/MongodbNodejs/blob/master/public/js/Expt15Controller.js" target="_blank">Controller </a></div>
+        <div><a href="https://github.com/visha-r/MongodbNodejs/blob/master/public/js/Week8ProductService.js" target="_blank"> Angular Service</a></div>
+        <h2>References</h2>
+        <div>No references</div>
+    </div>
+</body>
+</html>

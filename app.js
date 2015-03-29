@@ -46,7 +46,8 @@ var UserSchema = new mongoose.Schema(
 		{ 
 			firstname: String, lastname: String, email: String, username: String, 
 			password : String, country : String, address : String, phone : Number,
-			favorites :[FavoriteSchema], cart : [CartSchema], reviews:[ReviewSchema]
+			favorites :[FavoriteSchema], cart : [CartSchema], reviews:[ReviewSchema],
+			follows : [{username: String}], followedBy : [{username: String}]
 		});
 
 var ReviewerSchema = new mongoose.Schema(
@@ -169,14 +170,29 @@ app.put('/product/update/:id', function (req, res) {
 	})
 });
 
+app.put('/user/addFollows/:id', function(req,res){
+	Usermodel.findById(req.params.id, function(err, user){
+		user.follows = req.body.follows;
+		user.save(function(err, result){
+			Usermodel.findById(req.params.id, function(err, updatedUser){
+				res.json(updatedUser);
+			})
+		})
+	})
+})
+
+app.put('/user/addFollowedBy/:id', function(req,res){
+	Usermodel.findById(req.params.id, function(err, user){
+		user.followedBy = req.body.followedBy;
+		user.save(function(err, result){
+			res.json(result);
+		})
+	})
+})
+
 app.put('/product/addReview/:id', function (req, res) {
 	Productmodel.findById(req.params.id, function(err, data){
 		data.sku = req.body.sku;
-		data.name = req.body.name;
-		data.image = req.body.image;
-		data.salePrice = req.body.salePrice;
-		data.regularPrice = req.body.regularPrice;
-		data.shortDescription = req.body.shortDescription;
 		data.reviews = req.body.reviews;
 		data.save(function(err, data){
 			Productmodel.findById(req.params.id, function(err, result){
@@ -302,6 +318,27 @@ app.get('/product/fetchAll', function(req,res){
 		res.json(products);
 	})
 })
+
+app.post('/user/checkUsername', function(req, res) {
+  var username = req.body.username;
+  var usernameTaken = false;
+  Usermodel.findOne({username: username}, function(err,user){
+		if(user)
+			{
+			usernameTaken = true;
+			}
+		if (usernameTaken) {
+			res.status(403).json({
+				isTaken: true
+			});
+			return
+		}
+		else
+		{
+	  res.sendStatus(200);
+		}
+  })
+});
 
 var ip = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
