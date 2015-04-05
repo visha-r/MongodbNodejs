@@ -32,7 +32,8 @@ var ReviewSchema = new mongoose.Schema(
 
 var CartSchema = new mongoose.Schema(
 		{
-			id:Number
+			id:Number,
+			count:Number
 		}
 		);
 
@@ -238,6 +239,7 @@ app.put('/user/addToCart/:id', function(req,res){
 })
 
 app.put('/user/updateCart/:id', function(req,res){
+	console.log(req.body);
 	Usermodel.findById(req.params.id, function(err, data){
 		data.firstname = req.body.firstname;
 		data.lastname = req.body.lastname;
@@ -280,6 +282,30 @@ app.get('/user/details/:username', function(req,res){
 			}
 		}
 	})
+});
+
+//ajax target for checking password
+app.post('/user/checkPassword', function(req, res) {
+  var username = req.body.username;
+  // check if password matches
+  var noMatch = false;
+  Usermodel.findOne({username: username}, function(err,user){
+		if(user.password != req.body.password)
+			{
+			noMatch = true;
+			}
+		if (noMatch) {
+			res.json(403, {
+				noMatch: true
+			});
+			return
+		}
+		else
+		{
+	  // looks like everything is fine
+	  res.send(200);
+		}
+  })
 });
 
 app.post('/product/addReview', function (req, res) {
@@ -338,6 +364,32 @@ app.post('/user/checkUsername', function(req, res) {
 	  res.sendStatus(200);
 		}
   })
+});
+
+app.put('/user/addToCartFromFavorite/:id', function(req,res){
+	Usermodel.findById(req.params.id, function(err, data){
+		data.cart = req.body.cart;
+		data.save(function(err, result){
+			Usermodel.findById(req.params.id, function(err, doc){
+				res.json(doc);
+			})
+		})
+	})
+})
+
+app.put('/user/updateUser/:id', function(req,res){
+	Usermodel.findById(req.params.id, function(err, data){
+	data.firstname = req.body.firstname;
+	data.lastname = req.body.lastname;
+	data.country = req.body.country;
+	data.email = req.body.email;
+	data.password = req.body.password;
+	data.save(function(err, result){
+		Usermodel.findById(req.params.id, function(err, doc){
+			res.json(doc);
+		})
+	})
+})
 });
 
 var ip = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';

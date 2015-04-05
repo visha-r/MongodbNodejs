@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Visha's Experiments</title>
+<script type="text/javascript" src="js/jquery-1.11.2.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="css/bootstrap.min.css" />
+<link rel="stylesheet" href="css/bootstrap-theme.css" />
+<script type="text/javascript" src="js/angular.js"></script>
+<script type="text/javascript" src="js/angular-route.min.js"></script>
+<script type="text/javascript" src="js/ui-bootstrap-tpls-0.12.1.js"></script>
+<script type="text/javascript" src="js/Expt19Controller.js"></script>
+<script type="text/javascript" src="js/Week8ProductService.js"></script>
+<script type="text/javascript" src="js/Week8UserService.js"></script>
+<link rel="stylesheet" href="stylesheets/style.css" />
+</head>
+<body ng-app="AngularApp">
+	<div class="main-wrapper">
+		<h1>Experiment 4 - Changing user information</h1>
+		<div class="demo-wrapper">
+			<h2>Experiment to change user password using angular directive</h2>
+			<div class="container">
+				<div class="instructions">
+					<ul>
+						<li>In the change password page, you will get error if you type your old password incorrect</li>
+						<li>Error will be thrown if the new passwords typed, don't match each other</li>
+						<li>Submit button is enabled only if there is no error</li>
+						<li> You will be redirected to the Login page once password change is successful </li>
+					</ul>
+				</div>
+
+				<nav class="navbar navbar-inverse" ng-controller="MainController">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+							aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+						<ul class="nav navbar-nav">
+							<li id="homelink"><a href="#/home"><span class="menucolor">Home </span><span class="sr-only">(current)</span></a></li>
+							<li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="menucolor">Search by Category </span> <b
+									class="caret"></b></a>
+								<ul class="dropdown-menu multi-level">
+
+									<li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Laptops</a>
+										<ul class="dropdown-menu">
+											<li><a href="#/search/MOBILE COMPUTING/Lenovo">Lenovo</a></li>
+											<li class="divider"></li>
+											<li><a href="#/search/MOBILE COMPUTING/Samsung">Samsung</a></li>
+											<li class="divider"></li>
+											<li><a href="#/search/MOBILE COMPUTING/Dell">Dell</a></li>
+											<li class="divider"></li>
+											<li><a href="#/search/MOBILE COMPUTING/Acer">Acer</a></li>
+											<li class="divider"></li>
+											<li><a href="#/search/MOBILE COMPUTING/Asus">Asus</a></li>
+										</ul></li>
+									<li class="divider"></li>
+									<li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Mobile Phones</a>
+										<ul class="dropdown-menu">
+											<li><a href="#/search/SPRINT HARDWARE/Samsung">Samsung</a></li>
+											<li class="divider"></li>
+											<li><a href="#/search/SPRINT HARDWARE/Nokia">Nokia</a></li>
+											<li class="divider"></li>
+											<li><a href="#/search/SPRINT HARDWARE/Blackberry">Blackberry</a></li>
+										</ul></li>
+									<li class="divider"></li>
+									<li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Microwaves</a>
+										<ul class="dropdown-menu">
+											<li><a href="#/search/MICROWAVE/Frigidaire">Frigidaire</a></li>
+											<li class="divider"></li>
+											<li><a href="#/search/MICROWAVE/Samsung">Samsung</a></li>
+											<li class="divider"></li>
+											<li><a href="#/search/MICROWAVE/LG">LG</a></li>
+											<li class="divider"></li>
+											<li><a href="#/search/MICROWAVE/Panasonic">Panasonic</a></li>
+										</ul></li>
+									<li class="divider"></li>
+									<li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Washer and Dryers</a>
+										<ul class="dropdown-menu">
+											<li><a href="#/search/LAUNDRY/Whirlpool">Whirlpool</a></li>
+											<li class="divider"></li>
+											<li><a href="#/search/LAUNDRY/Samsung">Samsung</a></li>
+											<li class="divider"></li>
+											<li><a href="#/search/LAUNDRY/LG">LG</a></li>
+											<li class="divider"></li>
+											<li><a href="#/search/LAUNDRY/GE">GE</a></li>
+										</ul></li>
+								</ul></li>
+							<li id="favoritelink" ng-show="currentuser"><a href="#/profile/user"> <span class="menucolor">My Account</span></a></li>
+							<li><a href="#/storeLocator" class="menucolor"> <span class="menucolor">Store Locator</span></a></li>
+						</ul>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+
+						<ul class="nav navbar-nav navbar-right" ng-show="currentuser">
+							<li class="menucolor">Welcome &nbsp;&nbsp;{{user.firstname}}</li>
+							<li role="presentation"><a href="#/profile/cart"> <span class="glyphicon glyphicon-shopping-cart"></span> <span
+									class="badge">{{cartCount}}</span></a></li>
+							<li class="menucolor"><a href="#/logout" ng-click="logout()">Logout</a></li>
+						</ul>
+
+						<ul class="nav navbar-nav navbar-right" ng-show="!currentuser">
+							<li id="registerlink"><a href="#/register"><span class="menucolor">Sign up</span></a></li>
+							<li id="loginlink"><a href="#/login"><span class="menucolor">Login</span></a></li>
+						</ul>
+
+					</div>
+					<!--/.navbar-collapse -->
+				</nav>
+				<div ng-view></div>
+			</div>
+		</div>
+		<h2>About the experiment</h2>
+		<p id="text">This experiment is about letting the user to change his password. Though this experiment appears to be simple, it is
+			not so. Because when user tries to change his password, he must enter his old password for security. I have written an angular
+			directive which checks if the entered password matches the current one in the database. Based on the value returned from the databse,
+			an error will be thrown. Also separate directive is available to check if the new passwords entered match each other. Otherwise error
+			will be thrown. The submit button will be enabled only if there is no error. The directive that checks the password match is as
+			follows :
+		<div>
+		 <b> Code snippet :</b>
+		</div>
+		<span>
+		<pre>
+		app.directive('checkPassword', ['$http', function($http, $timeout) {  
+		return {
+		require: 'ngModel',
+		link: function(scope, elem, attrs, ctrl) {
+			scope.busy = false;
+			scope.$watch(attrs.ngModel, function(value) {
+				$http.post('/user/checkPassword',{username:scope.user.username, password:value})
+				.success(function(data) {
+					scope.busy = false;
+
+				})
+				.error(function(data) {
+					if (data.noMatch) {
+						ctrl.$setValidity('noMatch', true);
+					}
+					scope.busy = false;
+				});
+			})
+		}
+
+		</pre>
+		</span>
+		</p>
+		<h2>Source Code</h2>
+		<div>
+			<a href="https://github.com/visha-r/MongodbNodejs/blob/master/app.js" target="_blank">Server</a>
+		</div>
+		<div>
+			<a href="https://github.com/visha-r/MongodbNodejs/blob/master/public/js/Expt18Controller.js" target="_blank">Controller </a>
+		</div>
+		<div>
+			<a href="https://github.com/visha-r/MongodbNodejs/blob/master/public/js/Week8ProductService.js" target="_blank"> Angular Service</a>
+		</div>
+		<h2>References</h2>
+		<div>No references</div>
+	</div>
+</body>
+</html>
